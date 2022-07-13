@@ -40,6 +40,9 @@ const requestURLs = {
     fetchHorror: `${URL}discover/movie?with_genres=27&sort_by=vote_average.desc&api_key=${MOVIEDB_API}`,
 };
 
+app.get('/', (req, res) => {
+    return res.json({ status: 'Running' });
+});
 
 app.get("/api/:url", apiLimiter, cache('23 hours'), async (req, res) => {
     try {
@@ -52,6 +55,10 @@ app.get("/api/:url", apiLimiter, cache('23 hours'), async (req, res) => {
         res.status(500).json(e);
     }
 });
+
+app.get('*', (req, res) => {
+    return res.status(404).json({ msg: "Not found on the server" });
+})
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
